@@ -1,0 +1,13 @@
+*.plt
+*~
+esPIC
+cachegrind.out.*
+callgrind.out.*
+valgrindOutput
+vg
+
+
+
+
+
+

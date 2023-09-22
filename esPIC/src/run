@@ -1,0 +1,45 @@
+#
+# Remember, on Summit:
+#
+# module load intel
+# module load impi 
+
+rm *.plt
+
+#--------------------------------------------------------------------------------------------------------
+# REGULAR OPTION:
+#--------------------------------------------------------------------------------------------------------
+
+# mpirun -n 9 ./esPIC -nPEx 3 -nPEy 3 -nCellx 10 -nCelly 10 -nPtcl 50000  -flux 100 -tEnd 2 -dt .01 -tPlot .1
+ mpirun -n 9 --oversubscribe ./esPIC -nPEx 3 -nPEy 3 -nCellx 10 -nCelly 10 -nPtcl 50000  -flux 200  -tEnd 2 -dt .01 -tPlot .2
+
+#--------------------------------------------------------------------------------------------------------
+# VALGRIND OPTION:
+#--------------------------------------------------------------------------------------------------------
+
+# mpirun -n 1 valgrind --track-origins=yes ./esPIC -nPEx 1 -nPEy 1 -nCellx 5 -nCelly 5 -nPtclx 10 -nPtcly 10 -tEnd $1 -dt .1  2> valgrindOutput
+
+
+# mpirun -n 1 valgrind --tool=cachegrind ./esPIC -nPEx 1 -nPEy 1 -nCellx 10 -nCelly 10 -nPtcl 50000  -flux 200  -tEnd 2 -dt .01 -tPlot .2
+
+
+#--------------------------------------------------------------------------------------------------------
+# GNUPLOT FILES:
+#--------------------------------------------------------------------------------------------------------
+
+./writePlotCmd.py
+
+#--------------------------------------------------------------------------------------------------------
+# DEBUG FILES:
+#--------------------------------------------------------------------------------------------------------
+
+rm *.sed
+rm 0 1 2 3
+
+grep 'myPE: 0' tmp > 0.sed  ; sed s/'myPE: 0'/''/g 0.sed > 0
+grep 'myPE: 1' tmp > 1.sed  ; sed s/'myPE: 1'/''/g 1.sed > 1
+grep 'myPE: 2' tmp > 2.sed  ; sed s/'myPE: 2'/''/g 2.sed > 2
+grep 'myPE: 3' tmp > 3.sed  ; sed s/'myPE: 3'/''/g 3.sed > 3
+
+
+

@@ -1,0 +1,6 @@
+
+sbatch --export=CODE='/home/scru5660/HPSC/codes/fd_mpi/src' ../slurm/ex01.bat 
+
+clear ; squeue -u scru5660 -i 5
+
+
