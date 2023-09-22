@@ -26,7 +26,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <omp.h>
+// #include <omp.h>
 #include <chrono>
 #include <ctime>
 #include "stdio.h"

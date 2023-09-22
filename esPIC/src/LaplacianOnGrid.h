@@ -376,7 +376,8 @@ public:
     // |
     // -
 
-    //    iLOOP jLOOP { int p = pid(i,j) ; Qval[ p ] = x[p]; }
+    // For debugging -- set value to myPE
+    iLOOP jLOOP { int p = pid(i,j) ; Qval[ p ] = myPE; }
     
     myMPI.PEsum(Qval); 
     

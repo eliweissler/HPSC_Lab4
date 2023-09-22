@@ -309,7 +309,134 @@ class mpiInfo
     // all have that same summed value.
     //
     //
+
+    // GOAL: Send/recieve outer row of real node values for each cardinal direction
     
+    // Array to send/recieve in each direction
+    // Initialize to 0
+    
+    // North
+    double sendN[nRealx];
+    iLOOP sendN[i-1] = 0;
+    double recN[nRealx];
+    iLOOP recN[i-1] = 0;
+
+    // SOUTH
+    double sendS[nRealx];
+    iLOOP sendS[i-1] = 0;
+    double recS[nRealx];
+    iLOOP recS[i-1] = 0;
+
+    // EAST
+    double sendE[nRealy];
+    jLOOP sendE[j-1] = 0;
+    double recE[nRealy];
+    jLOOP recE[j-1] = 0;
+
+    // WEST
+    double sendW[nRealy];
+    jLOOP sendW[j-1] = 0;
+    double recW[nRealy];
+    jLOOP recW[j-1] = 0;
+
+    // Copy send values if a neighbor exists in that direction
+
+    // Not sure exactly what tag does
+    tag = 0;
+
+    // NORTH
+    if (nei_n >= 0){
+      // Copy and send top most real column
+      iLOOP sendN[i-1] = field[pid(i, nRealy)];
+      err = MPI_Isend(sendN, nRealx , MPI_DOUBLE , nei_n , tag , MPI_COMM_WORLD , &request );
+    }
+    // SOUTH
+    if (nei_s >= 0){
+      // Copy and send bottom most real column0
+      iLOOP sendS[i-1] = field[pid(i, 1)];
+      err = MPI_Isend(sendS, nRealx , MPI_DOUBLE , nei_s , tag , MPI_COMM_WORLD , &request );
+    }
+    // EAST
+    if (nei_e >= 0){
+      // Copy and send right most real column
+      jLOOP sendE[j-1] = field[pid(nRealx, j)];
+      err = MPI_Isend(sendE, nRealy , MPI_DOUBLE , nei_e , tag , MPI_COMM_WORLD , &request );
+    }
+    // WEST
+    if (nei_w >= 0){
+      // Copy and send left most real column
+      jLOOP sendW[j-1] = field[pid(1, j)];
+      err = MPI_Isend(sendW, nRealy , MPI_DOUBLE , nei_w , tag , MPI_COMM_WORLD , &request );
+    }
+
+    // Wait for all processes to send
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    // Recieve if neighbor exists and add to VD
+    if ( nei_n >= 0 ) { 
+      err = MPI_Irecv(recN, nRealx , MPI_DOUBLE , nei_n , tag , MPI_COMM_WORLD , &request );
+      MPI_Wait(&request,&status);
+      iLOOP field[pid(i, nRealy)] += recN[i-1];
+      }
+    if ( nei_s >= 0 ) { 
+      err = MPI_Irecv(recS, nRealx , MPI_DOUBLE , nei_s , tag , MPI_COMM_WORLD , &request );
+      MPI_Wait(&request,&status);
+      iLOOP field[pid(i, 1)] += recS[i-1];
+      }
+    if ( nei_e >= 0 ) { 
+      err = MPI_Irecv(recE, nRealy , MPI_DOUBLE , nei_e , tag , MPI_COMM_WORLD , &request );
+      MPI_Wait(&request,&status);
+      jLOOP field[pid(nRealx, j)] += recE[j-1];
+      }
+    if ( nei_w >= 0 ) { 
+      err = MPI_Irecv(recW, nRealy , MPI_DOUBLE , nei_w , tag , MPI_COMM_WORLD , &request );
+      MPI_Wait(&request,&status);
+      jLOOP field[pid(1, j)] += recW[j-1];
+      }    
+
+    // Debugging -- Print out the field values
+    cout << "------------------\n";
+    cout << "PE " << myPE << "\n"; 
+    print_field(field, nRealy, nRealx);
+    
+  }
+  int pid(int i,int j) { return (i+1) + (j)*(nRealx+2); }
+
+  // Array printing function for debugging
+  void print_array(double *arr, int start, int n)
+  {
+    cout << "[";
+    for (int i = start; i < start + n; ++i)
+    {
+      cout << arr[i];
+      if (i < n-1)
+      {
+        cout << ", ";
+      }
+    }
+    cout << "]";
+  }
+  void print_field(VD &field, int nrow, int ncol)
+  {
+    cout << "[[";
+    for (int row = 1; row <= nrow; ++row)
+    {
+      if (row > 1){ cout << " [";}
+      for (int col = 1; col <= ncol; ++col)
+      {
+        cout << field[pid(col, row)];
+        if (col < ncol)
+        {
+          cout << ", ";
+        }
+        else
+        {
+          cout << "]";
+        }
+      }
+      if (row < nrow){ cout << ",\n";}
+    }
+    cout << "]\n";
   }
 };
 
