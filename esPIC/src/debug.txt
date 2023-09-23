@@ -1,0 +1,46 @@
+
+------------------------------------------------------
+
+ E L E C T R O S T I C   P A R T I C L E - I N - C E L L
+ D E M O   C O D E                           
+
+ Running on 4 processors 
+
+------------------------------------------------------
+
+
+Input Summary: 
+--------------------------- 
+No. PE   in  x-direction: 2
+             y-direction: 2
+No. Cells in x-direction: 2
+             y-direction: 2
+Flux density            : 10
+End Time                : 0
+Time Step               : 0.01
+Plot Interval           : 0.1
+
+------------------
+PE 0 neighbors (N,E,S,W) (2,1,-1,-1)
+[[4, 4, 10],
+ [1, 1, 3],
+ [1, 1, 3]]
+------------------
+PE 1 neighbors (N,E,S,W) (3,-1,-1,0)
+[[10, 6, 6],
+ [3, 2, 2],
+ [3, 2, 2]]
+------------------
+PE 2 neighbors (N,E,S,W) (-1,3,0,-1)
+[[3, 3, 7],
+ [3, 3, 7],
+ [4, 4, 10]]
+------------------
+PE 3 neighbors (N,E,S,W) (-1,-1,1,2)
+[[7, 4, 4],
+ [7, 4, 4],
+ [10, 6, 6]]
+[ main ] EXECUTION TIME  = 361000 (ns)
+[ main ] EXECUTION TIME  = 361000 (ns)
+[ main ] EXECUTION TIME  = 334000 (ns)
+[ main ] EXECUTION TIME  = 460000 (ns)

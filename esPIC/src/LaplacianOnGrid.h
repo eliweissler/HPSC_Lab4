@@ -184,7 +184,11 @@ public:
     double c1 = 10.;
     double c2 = 10.;
 
-    rLOOP b[r] = -( -c1*Qval[r] + c2*phi[r] );
+    // Q IS INTERPRETED AS NEGATIVE CHARGE HERE
+    // rLOOP b[r] = -( -c1*Qval[r] + c2*phi[r] );
+
+    // Q IS INTERPRETED AS POSITIVE CHARGE HERE
+    rLOOP b[r] = -( c1*Qval[r] + c2*phi[r] );
 
     // Populate arrays, one for each side, containing the Dirichlet BCs
 
@@ -377,7 +381,7 @@ public:
     // -
 
     // For debugging -- set value to myPE
-    iLOOP jLOOP { int p = pid(i,j) ; Qval[ p ] = myPE; }
+    // iLOOP jLOOP { int p = pid(i,j) ; Qval[ p ] = myPE + 1; }
     
     myMPI.PEsum(Qval); 
     
@@ -424,6 +428,10 @@ public:
 	    
 	    PTCL.xf[ k ] = -0.01*( phiR - phiL ) / dx;
 	    PTCL.yf[ k ] = -0.01*( phiT - phiB ) / dy;
+
+      // Bug fix?
+	    // PTCL.xf[ k ] *= -1;
+	    // PTCL.yf[ k ] *= -1;
      	  }
        }
 

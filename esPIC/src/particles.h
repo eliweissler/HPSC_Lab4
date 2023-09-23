@@ -55,7 +55,7 @@ class particles
       for ( int i = 1 ; i < active.size() ; ++i ) active[i] = 0;
       fluxTimer = 0.;
 
-      Qp = 1.; // Extensive physical quantity represented by each particle
+      Qp = 10.; // Extensive physical quantity represented by each particle
       previousInjectionTime = 0.;
     }
 
